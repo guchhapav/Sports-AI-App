@@ -12,7 +12,7 @@ function App() {
 
   return (
     <div style={{ padding: "2rem" }}>
-      <h1>{greeting}</h1>
+      <p>{greeting}</p>
     </div>
   );
 }

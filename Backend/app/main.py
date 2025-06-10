@@ -1,5 +1,6 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI #type: ignore
+from fastapi.middleware.cors import CORSMiddleware #type: ignore
+from app import request #type: ignore
 
 app = FastAPI()
 
@@ -13,4 +14,4 @@ app.add_middleware(
 
 @app.get("/greet")
 def greet():
-    return {"message": "Hello from the FastAPI backend!"}
+    return {"message": request.getResponse()}
