@@ -5,10 +5,10 @@ from feedparser import FeedParserDict #type: ignore
 
 def getResponse(sport: Optional[str] = None) -> List[str]:
     if sport:
-        url = f"https://www.espn.com/espn/rss/{sport}/news"
+        url = "https://www.espn.com/espn/rss/"+ sport +"/news"
     else:
         url = "https://www.espn.com/espn/rss/news"   
-    
+    print(url)
     feed = feedparser.parse(url)
     
     raw_entries: List[Any] = feed.entries
@@ -19,7 +19,5 @@ def getResponse(sport: Optional[str] = None) -> List[str]:
             title = entry.get("title")
             if isinstance(title, str):
                 titles.append(title)    
+    print(titles)
     return titles
-    
-
-print(getResponse('NFL'))
