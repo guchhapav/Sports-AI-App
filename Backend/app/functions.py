@@ -1,6 +1,5 @@
 import feedparser #type: ignore
 from typing import List, Dict, Any, Optional
-from feedparser import parse #type: ignore
 from openai import OpenAI #type: ignore
 import os
 from dotenv import load_dotenv
@@ -47,7 +46,7 @@ def getAIresponse(entries: List[Dict[str, str]]):
         "content": [
             {
             "type": "input_text",
-            "text": "You are an expert sports analyst helping users stay informed. Summarize these headlines and their descriptions in concise bullet points. No more than 5."
+            "text": "You are an expert sports analyst helping users stay informed. Summarize these headlines and their descriptions in concise bullet points. No more than 5. Format each bullet point starting with the bullet character • (Unicode U+2022). Each bullet should be on its own line."
             }
         ]
         },
@@ -68,7 +67,7 @@ def getAIresponse(entries: List[Dict[str, str]]):
     },
     reasoning={},
     tools=[],
-    temperature=0.5,
+    temperature=0.7,
     max_output_tokens=2048,
     top_p=1,
     store=True
