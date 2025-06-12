@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import Selection from './components/Selection'
+import SportsSelector from './components/SportsSelector'
+import sportOptions from './assets/sportOptions';
 
 const App: React.FC = () => {
   const [selectedSports, setSelectedSports] = useState<string[]>([]);
@@ -15,11 +16,14 @@ const App: React.FC = () => {
 
   const fetchHeadlines = async () => {
     try {
+      const backendSports = selectedSports.map(sport => sportOptions[sport]);
+
       const res = await fetch("http://localhost:8000/summary", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sports: selectedSports }),
+        body: JSON.stringify({ sports: backendSports }),
       });
+
       const data = await res.json();
       console.log("Response from backend:", data);
       setSummary(data.summary);
@@ -29,9 +33,10 @@ const App: React.FC = () => {
     }
   };
 
+
   return (
     <main style={{ padding: "2rem" }}>
-      <Selection
+      <SportsSelector
         selectedSports={selectedSports}
         toggleSport={toggleSport}
       />

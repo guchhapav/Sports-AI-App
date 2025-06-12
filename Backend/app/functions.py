@@ -1,6 +1,6 @@
 import feedparser #type: ignore
 from typing import List, Dict, Any, Optional
-from feedparser import FeedParserDict #type: ignore
+from feedparser import parse #type: ignore
 from openai import OpenAI #type: ignore
 import os
 from dotenv import load_dotenv
