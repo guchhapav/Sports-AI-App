@@ -3,7 +3,7 @@ import Selection from './components/Selection'
 
 const App: React.FC = () => {
   const [selectedSports, setSelectedSports] = useState<string[]>([]);
-  const [headlines, setHeadlines] = useState<string[]>([]);
+  const [summary, setSummary] = useState<string>("");
 
   const toggleSport = (sport: string) => {
     setSelectedSports(prev =>
@@ -15,17 +15,17 @@ const App: React.FC = () => {
 
   const fetchHeadlines = async () => {
     try {
-      const res = await fetch("http://localhost:8000/headlines", {
+      const res = await fetch("http://localhost:8000/summary", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sports: selectedSports }),
       });
       const data = await res.json();
       console.log("Response from backend:", data);
-      setHeadlines(data.headlines);
+      setSummary(data.summary);
     } catch (err) {
       console.error(err);
-      setHeadlines(["Failed to fetch headlines"]);
+      setSummary("Failed to fetch headlines");
     }
   };
 
@@ -40,12 +40,10 @@ const App: React.FC = () => {
       </button>
 
       <section style={{ marginTop: "2rem" }}>
-        <h2>Headlines</h2>
-        <ul>
-          {headlines.map((title, idx) => (
-            <li key={idx}>{title}</li>
-          ))}
-        </ul>
+        <h2>Daily Update</h2>
+        <p>
+          {summary}
+        </p>
       </section>
     </main>
   );

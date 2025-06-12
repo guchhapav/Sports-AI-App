@@ -1,11 +1,11 @@
 from fastapi import FastAPI, Request #type: ignore
 from fastapi.middleware.cors import CORSMiddleware #type: ignore
-from app import article_grabber #type: ignore
-from typing import List
+from app import functions #type: ignore
+from typing import *
 
 app = FastAPI()
 
-# Allow frontend (on localhost:3000) to access backend
+# Allow frontend to access backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # for dev use only
@@ -13,16 +13,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/headlines")
-async def get_headlines(request: Request):
-    sports: List[str] = await request.json()
-    print(sports)
-    all_titles = []
-    for sport in sports['sports']:
-        all_titles.extend(article_grabber.getResponse(sport))
-    
-    return {"headlines": all_titles}
+@app.post("/summary")
+async def get_summary(request: Request):
+    sports: Dict[str, List[str]] = await request.json()
+    return {"summary": functions.getAIresponse(functions.getArticles(sports['sports']))}
 
 @app.get("/greet")
 def greet():
-    return {"message": article_grabber.getResponse()}
+    return {"message": 'Hello from the backend!'}
