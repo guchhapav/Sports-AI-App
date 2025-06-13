@@ -3,3 +3,7 @@ uvicorn[standard]
 feedparser
 openai
 dotenv
+sqlalchemy
+psycopg2-binary
+passlib[bcrypt]
+python-jose[cryptography]
