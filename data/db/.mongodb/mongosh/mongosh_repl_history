@@ -1,0 +1,11 @@
+exit
+db.users.find()
+db.getUsers()
+db.getusers()
+cd ..
+show collections
+users.find()
+db.users.find
+show collections
+use sportsnews
+show dbs
