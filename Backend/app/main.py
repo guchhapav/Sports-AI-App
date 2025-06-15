@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Request #type: ignore
 from fastapi.middleware.cors import CORSMiddleware #type: ignore
-from app import functions #type: ignore
-from typing import *
+from app.functions.getAIresponse import getAIresponse #type: ignore
+from app.functions.getArticles import getArticles #type: ignore
+from typing import Dict, List
 
 app = FastAPI()
 
@@ -16,7 +17,7 @@ app.add_middleware(
 @app.post("/summary")
 async def get_summary(request: Request):
     sports: Dict[str, List[str]] = await request.json()
-    return {"summary": functions.getAIresponse(functions.getArticles(sports['sports']))}
+    return {"summary": getAIresponse(getArticles(sports['sports']))}
 
 @app.get("/greet")
 def greet():
