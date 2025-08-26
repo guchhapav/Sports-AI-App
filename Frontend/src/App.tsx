@@ -1,22 +1,27 @@
-import React, { useState } from 'react';
-import SportsSelector from './components/SportsSelector'
-import sportOptions from './assets/sportOptions';
-import Summary from './components/Summary';
-import FetchHeadlines from './components/FetchHeadlines';
-import { useSportSelection } from './hooks/useSportSelection';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AppProvider } from './context/AppContext';
+import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
+import Preferences from './pages/Preferences';
+import Chat from './pages/Chat';
+import About from './pages/About';
 
-
-const App: React.FC = () => {
-  const { selectedSports, toggleSport } = useSportSelection();
-  const [summary, setSummary] = useState<string>("");
-
+function App() {
   return (
-    <main style={{ padding: "2rem" }}>
-      <SportsSelector selectedSports={selectedSports} toggleSport={toggleSport} />
-      <FetchHeadlines selectedSports={selectedSports} setSummary={setSummary} />
-      <Summary summary={summary} />
-    </main>
+    <AppProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="preferences" element={<Preferences />} />
+            <Route path="chat" element={<Chat />} />
+            <Route path="about" element={<About />} />
+          </Route>
+        </Routes>
+      </Router>
+    </AppProvider>
   );
-};
+}
 
 export default App;
