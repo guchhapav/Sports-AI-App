@@ -1,43 +1,87 @@
-import React, { useEffect, useState } from "react";
-import { fetchNews, fetchSummary } from "../api";
+import React from 'react';
+import { useApp } from '../context/AppContext';
+import NewsCard from '../components/NewsCard';
+import { TrendingUp, BookOpen, Star } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
-  const [articles, setArticles] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { getPersonalizedNews, preferences } = useApp();
+  const news = getPersonalizedNews();
 
-  useEffect(() => {
-    fetchNews()
-      .then(data => setArticles(data.articles))
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
+  const followingNews = news.filter(article => 
+    preferences.followingSports.includes(article.sport)
+  );
+  
+  const curiousNews = news.filter(article => 
+    preferences.curiousSports.includes(article.sport)
+  );
 
-  // Example: Summarize the first article on click
-  const handleSummarize = async (content: string) => {
-    try {
-      const { summary } = await fetchSummary(content);
-      alert(summary);
-    } catch (e) {
-      alert("Failed to summarize");
-    }
-  };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (news.length === 0) {
+    return (
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-md-8 text-center">
+            <div className="card">
+              <div className="card-body py-5">
+                <TrendingUp size={48} className="text-muted mb-3" />
+                <h3>Welcome to SportsHub!</h3>
+                <p className="text-muted mb-4">
+                  Start by selecting your favorite sports in the preferences to get personalized news.
+                </p>
+                <a href="/preferences" className="btn btn-primary">
+                  Set Your Preferences
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h2>Sports News</h2>
-      {articles.map((a, i) => (
-        <div key={i} style={{ marginBottom: 16 }}>
-          <h4>{a.title}</h4>
-          <p>{a.summary || a.content}</p>
-          <button onClick={() => handleSummarize(a.content)}>
-            Summarize with AI
-          </button>
+    <div className="container">
+      <div className="row">
+        <div className="col-12 mb-4">
+          <h1 className="display-5 fw-bold">Your Sports Dashboard</h1>
+          <p className="lead text-muted">
+            Stay updated with personalized news from your favorite sports
+          </p>
         </div>
-      ))}
+      </div>
+
+      <div className="row">
+        {followingNews.length > 0 && (
+          <div className="col-lg-6 mb-4">
+            <div className="d-flex align-items-center mb-3">
+              <Star className="text-warning me-2" size={24} />
+              <h2 className="h4 mb-0">Following Sports</h2>
+            </div>
+            <div className="row">
+              {followingNews.map(article => (
+                <div key={article.id} className="col-12">
+                  <NewsCard article={article} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {curiousNews.length > 0 && (
+          <div className="col-lg-6 mb-4">
+            <div className="d-flex align-items-center mb-3">
+              <BookOpen className="text-info me-2" size={24} />
+              <h2 className="h4 mb-0">Learning About</h2>
+            </div>
+            <div className="row">
+              {curiousNews.map(article => (
+                <div key={article.id} className="col-12">
+                  <NewsCard article={article} isEducational={article.isEducational} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
