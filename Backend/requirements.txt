@@ -3,7 +3,6 @@ uvicorn[standard]
 feedparser
 openai
 dotenv
-beanie
 pydantic[email]
 psycopg2-binary
 passlib[bcrypt]
